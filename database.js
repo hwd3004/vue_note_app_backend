@@ -24,7 +24,7 @@ module.exports = {
           console.log("쿼리 실패");
         } else {
           console.log("쿼리 성공 / rows : ", rows);
-          console.log("fields : ", fields);
+          // console.log("fields : ", fields);
           resovle(rows);
         }
       });

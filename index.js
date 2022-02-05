@@ -1,11 +1,14 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const morgan = require("morgan");
 const db = require("./database");
 
 const app = express();
 
 app.use(bodyParser.json()); // post 요청 메소드의 request.body를 읽어옴
+
+app.use(morgan("tiny"));
 
 app.use(
   cors({
@@ -27,10 +30,11 @@ app.post("/api/memos", async (req, res) => {
   res.send(result);
 });
 
-app.put("/api/memos/:idx", (req, res) => {
-  console.log(req.params);
-  memos[req.params.idx] = req.body.content;
-  res.send(memos);
+app.put("/api/memos/:id", async (req, res) => {
+  // console.log(req.params);
+  await db.run(`update memos set content = ${req.body.content} where id = ${req.params.id}`);
+  const result = await db.run("select * from memos");
+  res.send(result);
 });
 
 app.listen(port, () => {
